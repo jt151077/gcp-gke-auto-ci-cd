@@ -20,16 +20,12 @@ locals {
   project_number         = var.project_nmr
   project_default_region = var.project_default_region
   gcp_service_list = [
-    #"artifactregistry.googleapis.com",
-    "bigquery.googleapis.com",
-    "bigquerystorage.googleapis.com",
-    #"clouddeploy.googleapis.com",
-    #"container.googleapis.com",
-    #"compute.googleapis.com",
+    "artifactregistry.googleapis.com",
+    "clouddeploy.googleapis.com",
+    "container.googleapis.com",
+    "compute.googleapis.com",
     "iam.googleapis.com",
     "iamcredentials.googleapis.com",
-    "pubsub.googleapis.com",
-    "dataflow.googleapis.com",
     "storage.googleapis.com"
   ]
 }
