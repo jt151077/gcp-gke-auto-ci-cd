@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: html-nginx
+  labels:
+    app: html-nginx
+spec:
+  selector:
+    matchLabels:
+      app: html-nginx
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: html-nginx
+    spec:
+      containers:
+      - name: html-nginx
+        image: html-nginx
+        ports:
+        - containerPort: 80
+          protocol: TCP

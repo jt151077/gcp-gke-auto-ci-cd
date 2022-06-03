@@ -21,6 +21,7 @@ locals {
   project_default_region = var.project_default_region
   gcp_service_list = [
     "artifactregistry.googleapis.com",
+    "cloudbuild.googleapis.com",
     "clouddeploy.googleapis.com",
     "container.googleapis.com",
     "compute.googleapis.com",

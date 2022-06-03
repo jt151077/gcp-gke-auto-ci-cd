@@ -1,0 +1,27 @@
+apiVersion: skaffold/v2beta16
+kind: Config
+metadata:
+  name: html-nginx
+build:
+  local: 
+    push: false
+  artifacts:
+  - image: html-nginx
+    context: app
+    docker:
+      dockerfile: Dockerfile
+deploy:
+  kustomize:
+    paths: 
+      - k8s/overlays/prod
+portForward:
+- resourceType: deployment
+  resourceName: html-nginx
+  port: 80 
+  localPort: 80
+profiles:
+  - name: prod
+    deploy:
+      kustomize:
+        paths: 
+          - k8s/overlays/prod

@@ -1,0 +1,19 @@
+apiVersion: deploy.cloud.google.com/v1beta1
+kind: DeliveryPipeline
+metadata:
+  name: html-nginx-pipeline
+description: html-nginx application delivery pipeline
+serialPipeline:
+ stages:
+ - targetId: prod
+   profiles:
+   - prod
+---
+
+apiVersion: deploy.cloud.google.com/v1beta1
+kind: Target
+metadata:
+  name: prod
+description: prod cluster
+gke:
+  cluster: projects/sound-aileron-352014/locations/europe-west1/clusters/gke-cluster
