@@ -16,4 +16,4 @@ metadata:
   name: prod
 description: prod cluster
 gke:
-  cluster: projects/long-stack-353314/locations/europe-west1/clusters/gke-cluster
+  cluster: projects/PROJECT_ID/locations/europe-west1/clusters/gke-cluster

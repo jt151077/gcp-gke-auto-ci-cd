@@ -1,6 +1,6 @@
 substitutions:
   _REGION: "europe-west1"
-  _PROJECT: "long-stack-353314"
+  _PROJECT: "PROJECT_ID"
 steps:
   # Apply Cloud Deploy pipeline scaffolding
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
