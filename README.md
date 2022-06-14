@@ -1,98 +1,102 @@
 # gcp-gke-auto-ci-cd
-Simple K8S (using [kustomize](https://kustomize.io/)) example using Terraform, CloudBuild, CloudDeploy, GKE Autopilot to deploy a simple web site from a docker container.
-
+Simple K8S (using [kustomize](https://kustomize.io/)) example using Terraform, CloudBuild, CloudDeploy, GKE Autopilot to deploy a simple web site from a docker container in GCP.
 
 
 ## Overall architecture
 
-![](imgs/0.png)
+![](imgs/5.png)
 
 
 ## Project structure
 ```
 .
-├── bigquery.tf (datasets and tables)
+├── app (web application based on nginx)
+│   ├── Dockerfile
+│   └── index.html
+├── cloudbuild.yaml (build sequence for Cloud Build)
+├── clouddeploy.yaml (delivery pipeline for Cloud Deploy )
 ├── config.tf (services and provider)
+├── deploy.sh (deploy script using gcloud command)
+├── gke.tf (managed kubernetes cluster)
 ├── iam.tf (service accounts and roles)
 ├── imgs
 │   ├── 0.png
 │   ├── 1.png
-│   └── 2.png
+│   ├── 2.png
+│   ├── 3.png
+│   ├── 4.png
+│   └── 5.png
+├── install.sh (install script for gcp api using gcloud command)
+├── k8s (kubernetes config files, based on kustomize)
+│   ├── base
+│   │   ├── deployment.yaml
+│   │   ├── hpa.yaml
+│   │   ├── kustomization.yaml
+│   │   └── service.yaml
+│   └── overlays
+│       └── prod
+│           ├── deployment.yaml
+│           ├── hpa.yaml
+│           └── kustomization.yaml
 ├── network.tf (vpc and subnet)
 ├── README.md (this file)
-├── stations.csv (sample data)
-├── storage.tf (blob storage for sample file)
-├── streaming.tf (pub/sub and dataflow)
-├── terraform.tfvars.json (environment variables - not commited)
-├── update_stations.py (station status generator)
+├── skaffold.yaml (scaffold file for kustomize)
+├── uninstall.sh (uninstall script using gcloud command)
 └── vars.tf (variables configuration)
 ```
 
 ## Setup
 
-1. Create a file `terraform.tfvars.json` with the following format. Set the correct values for your project
-```json
-{
-    "project_id": "YOUR-PROJECT-ID",
-    "project_nmr": YOUR-PROJECT-NUMBER
-}
+1. Find out your GCP project's id and number from the dashboard in the cloud console, and run the following commands in a terminal at the root of source code (replace `your_project_number` and `your_project_id` by the correct values):
+```shell
+sed -i 's/PROJECT_NMR/your_project_number/g' *.*
+sed -i 's/PROJECT_ID/your_project_id/g' *.*
 ```
 
 ## Install
 
 1. Run the following command at the root of the folder:
 ```shell 
+$ ./install.sh
 $ terraform init
 $ terraform plan
 $ terraform apply
 ```
 
-> This will install 24 resources
+> This will install 18 resources
+> Note: You may have to run `terraform plan` and `terraform apply` twice if you get errors for serviceaccounts not found
 
-2. Create a table `stations` in the `data_raw` dataset. Use the `stations.csv` file from the bucket `YOUR-PROJECT-ID_source_csv`
-
-> Source: https://opencom.no/dataset/ladetasjoner-oslo
-
-![](imgs/1.png)
-
-
-3. Insert and parse the raw data in the production dataset
-
-```
-INSERT INTO `.data_prod.ChargingStations` SELECT id, name, street, town as city, lat, lng, provider FROM `.data_raw.stations`
-```
-
-4. Generate fictive charging station status using the python generator, by running the following in a terminal at the root of your project:
+2. Build and deploy the webserver image in GKE, by issuing the following command at the root of the project:
 
 ```shell
-$ python3 update_stations.py
-
+$ ./deploy.sh
 ```
 
-> This will output the Pub/Sub message id as a result
+> This will build a docker image using Cloud Build
 
+![](imgs/0.png)
 
-5. Visualize the results. Open BigQuery Geo Viz with the following link. Select the project where you have the data, and use the following SQL Query to render the location of the 
+> This will then deploy the image to GKE using Cloud Deploy
 
-https://bigquerygeoviz.appspot.com/
-
-```
-SELECT *, ST_GEOGPOINT(lng, lat) as loc FROM `.data_prod.ChargersAvailability` 
-```
-
+![](imgs/1.png)
 ![](imgs/2.png)
 
+> This will also deploy a GKE Service of type LoadBalancer. 
+
+![](imgs/3.png)
+
+2. Open the IP address of the LoadBalancer in a web browser and you should see the following:
+
+![](imgs/4.png)
 
 
 ## Uninstall
 
 
-1. Manually delete the BigQuery table `stations` in the dataset `data_raw`
-
-2. Run the following at the root of your project
+1. Run the following at the root of your project
 
 ```shell 
-$ terraform destroy
+$ ./uninstall.sh
 ```
 
 > All resources will now be removed from your project
