@@ -1,19 +1,32 @@
-apiVersion: deploy.cloud.google.com/v1beta1
+apiVersion: deploy.cloud.google.com/v1
 kind: DeliveryPipeline
 metadata:
   name: html-nginx-pipeline
 description: html-nginx application delivery pipeline
 serialPipeline:
  stages:
+ - targetId: development
+   profiles:
+   - development
  - targetId: prod
    profiles:
    - prod
 ---
 
-apiVersion: deploy.cloud.google.com/v1beta1
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: development
+description: development cluster
+gke:
+  cluster: projects/YOUR_PROJECT_ID/locations/YOUR_PROJECT_REGION/clusters/dev-cluster
+---
+
+apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
   name: prod
 description: prod cluster
+requireApproval: true
 gke:
-  cluster: projects/PROJECT_ID/locations/europe-west1/clusters/gke-cluster
+  cluster: projects/YOUR_PROJECT_ID/locations/YOUR_PROJECT_REGION/clusters/prod-cluster

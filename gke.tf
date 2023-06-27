@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
+locals {
+  clusters = ["dev", "prod"]
+}
 
 resource "google_container_cluster" "autopilot_cluster" {
   depends_on = [
-    google_compute_network.custom_vpc
+    google_compute_network.custom_vpc,
+    google_project_service.gcp_services,
+    google_service_account.gke_custom_sa
   ]
 
-  name       = "gke-cluster"
+  count      = length(local.clusters)
+  name       = "${local.clusters[count.index]}-cluster"
   location   = local.project_default_region
   project    = local.project_id
   network    = google_compute_network.custom_vpc.id
@@ -37,13 +43,15 @@ resource "google_container_cluster" "autopilot_cluster" {
   release_channel {
     channel = "REGULAR"
   }
-}
 
-resource "google_artifact_registry_repository" "repo" {
-  provider      = google-beta
-  project       = local.project_id
-  location      = local.project_default_region
-  repository_id = "html-nginx"
-  description   = "Docker repository"
-  format        = "DOCKER"
+  node_config {
+    service_account = google_service_account.gke_custom_sa.email
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/cloud-platform"
+    ]
+  }
+
+  lifecycle {
+    ignore_changes = [node_config]
+  }
 }

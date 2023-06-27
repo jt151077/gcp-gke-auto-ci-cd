@@ -14,30 +14,15 @@
  * limitations under the License.
  */
 
-data "google_compute_zones" "available" {
-  project = local.project_id
-  region  = local.project_default_region
-}
-
-resource "google_compute_network" "custom_vpc" {
+resource "google_artifact_registry_repository" "repo" {
   depends_on = [
     google_project_service.gcp_services
   ]
 
-  name                    = "custom-vpc"
-  project                 = local.project_id
-  auto_create_subnetworks = false
-}
-
-resource "google_compute_subnetwork" "custom-subnet" {
-  depends_on = [
-    google_project_service.gcp_services,
-    google_compute_network.custom_vpc
-  ]
-
-  name          = "subnet-${local.project_default_region}"
+  provider      = google-beta
   project       = local.project_id
-  ip_cidr_range = "10.51.0.0/20"
-  region        = local.project_default_region
-  network       = google_compute_network.custom_vpc.id
+  location      = local.project_default_region
+  repository_id = "html-nginx"
+  description   = "Docker repository"
+  format        = "DOCKER"
 }

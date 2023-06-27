@@ -1,33 +1,30 @@
-substitutions:
-  _REGION: "europe-west1"
-  _PROJECT: "PROJECT_ID"
 steps:
   # Apply Cloud Deploy pipeline scaffolding
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
     args: 
       [
-        "beta", "deploy", "apply",
+        "deploy", "apply",
         "--file", "clouddeploy.yaml",
-        "--region", "$_REGION",
-        "--project", "$_PROJECT"
+        "--region", "${_REGION}",
+        "--project", "$PROJECT_ID"
       ]
   # Build and tag using commit sha
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '.', '-t', '$_REGION-docker.pkg.dev/$_PROJECT/html-nginx/html-nginx:latest', '-f', 'Dockerfile']
+    args: ['build', '.', '-t', '${_REGION}-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx:$BUILD_ID', '-f', 'Dockerfile']
     dir: 'app'
   # Push the container image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', '$_REGION-docker.pkg.dev/$_PROJECT/html-nginx/html-nginx:latest']
+    args: ['push', '${_REGION}-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx:$BUILD_ID']
   # Create release in Google Cloud Deploy
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
     args: 
       [
-        "beta", "deploy", "releases", "create", "rel-$BUILD_ID",
+        "deploy", "releases", "create", "rel-$BUILD_ID",
         "--delivery-pipeline", "html-nginx-pipeline",
-        "--region", "$_REGION",
-        "--images", "html-nginx=$_REGION-docker.pkg.dev/$_PROJECT/html-nginx/html-nginx:latest"
+        "--region", "${_REGION}",
+        "--images", "html-nginx=${_REGION}-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx:$BUILD_ID"
       ]
 options:
   logging: CLOUD_LOGGING_ONLY

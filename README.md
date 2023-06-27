@@ -47,11 +47,20 @@ Simple K8S (using [kustomize](https://kustomize.io/)) example using Terraform, C
 
 ## Setup
 
-1. Find out your GCP project's id and number from the dashboard in the cloud console, and run the following commands in a terminal at the root of source code (replace `your_project_number` and `your_project_id` by the correct values):
+1. Find out your GCP project's id and number from the dashboard in the cloud console, and update the following variables in the `terraform.tfvars.json` file. Replace `YOUR_PROJECT_NMR`, `YOUR_PROJECT_ID` and `YOUR_PROJECT_REGION` with the correct values. 
+
+
 ```shell
-sed -i 's/PROJECT_NMR/your_project_number/g' *.*
-sed -i 's/PROJECT_ID/your_project_id/g' *.*
+{
+    "project_id": "YOUR_PROJECT_ID",
+    "project_nmr": YOUR_PROJECT_NMR,
+    "project_default_region": "YOUR_PROJECT_REGION"
+}
 ```
+
+
+2. In the file `clouddbuild.yaml` replace `YOUR_PROJECT_ID` and `YOUR_PROJECT_REGION` with the correct values. 
+
 
 ## Install
 

@@ -13,13 +13,18 @@ build:
 deploy:
   kustomize:
     paths: 
-      - k8s/overlays/prod
+      - k8s/overlays/dev
 portForward:
 - resourceType: deployment
   resourceName: html-nginx
   port: 80 
   localPort: 80
 profiles:
+  - name: development
+    deploy:
+      kustomize:
+        paths: 
+          - k8s/overlays/dev
   - name: prod
     deploy:
       kustomize:
