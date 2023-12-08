@@ -23,7 +23,7 @@ steps:
     entrypoint: gcloud
     args: 
       [
-        "deploy", "releases", "create", "rel-$COMMIT_SHA",
+        "deploy", "releases", "create", "rel-$BUILD_ID",
         "--delivery-pipeline", "html-nginx-pipeline",
         "--region", "${_REGION}",
         "--images", "html-nginx=${_REGION}-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx:$COMMIT_SHA"
