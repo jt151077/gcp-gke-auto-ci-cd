@@ -18,6 +18,12 @@ steps:
   # Push the container image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', '${_REGION}-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx:$COMMIT_SHA']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        gcloud artifacts docker images describe $_REGION-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx:$COMMIT_SHA --format 'value(image_summary.digest)' > /workspace/sha
   # Create release in Google Cloud Deploy
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
@@ -26,10 +32,9 @@ steps:
         "deploy", "releases", "create", "rel-$BUILD_ID",
         "--delivery-pipeline", "html-nginx-pipeline",
         "--region", "${_REGION}",
-        "--images", "html-nginx=${_REGION}-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx:$COMMIT_SHA"
+        "--images", "html-nginx=${_REGION}-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx@sha256:$(cat /workspace/sha)"
       ]
 images: ['${_REGION}-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx:$COMMIT_SHA']
 options:
   logging: CLOUD_LOGGING_ONLY
   requestedVerifyOption: VERIFIED
-
