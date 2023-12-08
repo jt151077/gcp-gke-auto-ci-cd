@@ -11,20 +11,23 @@ steps:
       ]
   # Build and tag using commit sha
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '.', '-t', '${_REGION}-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx:$BUILD_ID', '-f', 'Dockerfile']
+    args: ['build', '.', '-t', '${_REGION}-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx:$COMMIT_SHA', '-f', 'Dockerfile']
     dir: 'app'
   # Push the container image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', '${_REGION}-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx:$BUILD_ID']
+    args: ['push', '${_REGION}-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx:$COMMIT_SHA']
   # Create release in Google Cloud Deploy
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
     args: 
       [
-        "deploy", "releases", "create", "rel-$BUILD_ID",
+        "deploy", "releases", "create", "rel-$COMMIT_SHA",
         "--delivery-pipeline", "html-nginx-pipeline",
         "--region", "${_REGION}",
-        "--images", "html-nginx=${_REGION}-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx:$BUILD_ID"
+        "--images", "html-nginx=${_REGION}-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx:$COMMIT_SHA"
       ]
+images: ['${_REGION}-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx:$COMMIT_SHA']
 options:
   logging: CLOUD_LOGGING_ONLY
+  requestedVerifyOption: VERIFIED
+

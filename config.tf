@@ -40,7 +40,7 @@ resource "google_project_service" "gcp_services" {
 }
 
 terraform {
-  required_version = "= 1.5.1"
+  required_version = ">= 1.5.1"
 
   required_providers {
     google = {
