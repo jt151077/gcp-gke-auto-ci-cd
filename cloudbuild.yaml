@@ -1,3 +1,5 @@
+substitutions:
+  _REGION: "europe-west1"
 steps:
   # Apply Cloud Deploy pipeline scaffolding
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
