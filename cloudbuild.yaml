@@ -30,7 +30,7 @@ steps:
     args:
       - '-c'
       - |
-        gcloud deploy releases create rel-$BUILD_ID --delivery-pipeline "html-nginx-pipeline" --region ${_REGION} --images "html-nginx=${_REGION}-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx@sha256:$(cat /workspace/sha)"
+        gcloud deploy releases create rel-$BUILD_ID --delivery-pipeline "html-nginx-pipeline" --region ${_REGION} --images "html-nginx=${_REGION}-docker.pkg.dev/$PROJECT_ID/html-nginx/html-nginx@$(cat /workspace/sha)"
   #- name: gcr.io/google.com/cloudsdktool/cloud-sdk
   #  entrypoint: gcloud
   #  args: 
