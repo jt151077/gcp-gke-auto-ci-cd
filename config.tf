@@ -27,6 +27,7 @@ locals {
     "compute.googleapis.com",
     "iam.googleapis.com",
     "iamcredentials.googleapis.com",
+    "serviceusage.googleapis.com",
     "storage.googleapis.com"
   ]
 }
