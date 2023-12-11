@@ -59,7 +59,9 @@ Simple K8S (using [kustomize](https://kustomize.io/)) example using Terraform, C
 ```
 
 
-2. In the file `clouddbuild.yaml` replace `YOUR_PROJECT_ID` and `YOUR_PROJECT_REGION` with the correct values. 
+2. In the file `clouddbuild.yaml` set `_REGION` (in substitutions) with the correct values.
+
+3. In the file `clouddeploy.yaml` set the correct values for the gke cluster URIs (`projects/YOUR_PROJECT_ID/locations/YOUR_PROJECT_REGION/clusters/CLUSTER_ID`)
 
 
 ## Install
