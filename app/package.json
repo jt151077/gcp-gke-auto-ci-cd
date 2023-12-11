@@ -1,5 +1,5 @@
 {
-    "name": "app3",
+    "name": "app",
     "version": "1.0.0",
     "description": "",
     "type": "module",
@@ -9,7 +9,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "log4j": "1.0.0",
         "log4js": "1.0.0"
+
     }
 }
