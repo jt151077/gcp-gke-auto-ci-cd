@@ -52,6 +52,6 @@ resource "google_container_cluster" "autopilot_cluster" {
   }
 
   lifecycle {
-    ignore_changes = [node_config, node_pool]
+    ignore_changes = all
   }
 }

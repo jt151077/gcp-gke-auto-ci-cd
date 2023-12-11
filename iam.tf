@@ -37,6 +37,38 @@ resource "google_project_iam_member" "act_as" {
 }
 
 
+resource "google_project_iam_member" "cloudbuild_artifactregistry_reader" {
+  depends_on = [
+    google_project_service.gcp_services
+  ]
+
+  project = local.project_id
+  role    = "roles/artifactregistry.reader"
+  member  = "serviceAccount:${local.project_number}@cloudbuild.gserviceaccount.com"
+}
+
+resource "google_project_iam_member" "cloudbuild_containeranalysis_viewer" {
+  depends_on = [
+    google_project_service.gcp_services
+  ]
+
+  project = local.project_id
+  role    = "roles/containeranalysis.occurrences.viewer"
+  member  = "serviceAccount:${local.project_number}@cloudbuild.gserviceaccount.com"
+}
+
+resource "google_project_iam_member" "cloudbuild_serviceusage_viewer" {
+  depends_on = [
+    google_project_service.gcp_services
+  ]
+
+  project = local.project_id
+  role    = "roles/serviceusage.serviceUsageViewer"
+  member  = "serviceAccount:${local.project_number}@cloudbuild.gserviceaccount.com"
+}
+
+
+
 #custom GKE service account
 resource "google_service_account" "gke_custom_sa" {
   depends_on = [

@@ -24,6 +24,8 @@ locals {
     "cloudbuild.googleapis.com",
     "clouddeploy.googleapis.com",
     "container.googleapis.com",
+    "containeranalysis.googleapis.com",
+    "containerscanning.googleapis.com",
     "compute.googleapis.com",
     "iam.googleapis.com",
     "iamcredentials.googleapis.com",
