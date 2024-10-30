@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: jeremy-ns-dev
-  labels:
-    name: jeremy-ns-dev
