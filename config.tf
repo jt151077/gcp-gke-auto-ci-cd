@@ -58,3 +58,6 @@ terraform {
     }
   }
 }
+
+
+## create a storage bucket in europe-west 1
