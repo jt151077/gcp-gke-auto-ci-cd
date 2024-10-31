@@ -2,7 +2,7 @@ substitutions:
   _REGION: "europe-west1"
 steps:
   - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
+    entrypoint: 'sh'
     args:
       - '-c'
       - |

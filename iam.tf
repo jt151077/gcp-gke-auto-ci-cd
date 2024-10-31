@@ -67,6 +67,15 @@ resource "google_project_iam_member" "cloudbuild_serviceusage_viewer" {
   member  = "serviceAccount:${local.project_number}@cloudbuild.gserviceaccount.com"
 }
 
+resource "google_project_iam_member" "cloudbuild_container_developer" {
+  depends_on = [
+    google_project_service.gcp_services
+  ]
+
+  project = local.project_id
+  role    = "roles/container.developer"
+  member  = "serviceAccount:${local.project_number}@cloudbuild.gserviceaccount.com"
+}
 
 
 #custom GKE service account
