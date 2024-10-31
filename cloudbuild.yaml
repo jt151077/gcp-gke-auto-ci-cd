@@ -7,9 +7,9 @@ steps:
       - '-c'
       - |
         gcloud container clusters get-credentials dev-cluster --location=${_REGION} --project=$PROJECT_ID
-        kubectl create namespace jeremy-ns-dev
+        kubectl create namespace jeremy-ns-dev || true
         gcloud container clusters get-credentials prod-cluster --location=${_REGION} --project=$PROJECT_ID
-        kubectl create namespace jeremy-ns-prod
+        kubectl create namespace jeremy-ns-prod || true
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
     args: 
