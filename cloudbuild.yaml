@@ -1,7 +1,15 @@
 substitutions:
   _REGION: "europe-west1"
 steps:
-  # Apply Cloud Deploy pipeline scaffolding
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud container clusters get-credentials dev-cluster --location=${_REGION} --project=$PROJECT_ID
+        kubectl create namespace jeremy-ns-dev
+        gcloud container clusters get-credentials prod-cluster --location=${_REGION} --project=$PROJECT_ID
+        kubectl create namespace jeremy-ns-prod
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
     args: 
