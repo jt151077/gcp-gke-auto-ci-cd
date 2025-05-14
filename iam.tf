@@ -142,3 +142,14 @@ resource "google_project_iam_member" "compute_artifactregistry_reader" {
   role    = "roles/artifactregistry.reader"
   member  = "serviceAccount:${local.project_number}-compute@developer.gserviceaccount.com"
 }
+
+
+resource "google_project_iam_member" "node_service_account" {
+  depends_on = [
+    google_project_service.gcp_services
+  ]
+
+  project = local.project_id
+  role    = "roles/container.defaultNodeServiceAccount"
+  member  = "serviceAccount:${local.project_number}-compute@developer.gserviceaccount.com"
+}
