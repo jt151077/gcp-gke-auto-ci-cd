@@ -40,4 +40,11 @@ resource "google_compute_subnetwork" "custom-subnet" {
   ip_cidr_range = "10.51.0.0/20"
   region        = local.project_default_region
   network       = google_compute_network.custom_vpc.id
+
+  log_config {
+    aggregation_interval = "INTERVAL_5_SEC"
+    flow_sampling        = 0.5
+    metadata             = "INCLUDE_ALL_METADATA"
+    metadata_fields      = []
+  }
 }

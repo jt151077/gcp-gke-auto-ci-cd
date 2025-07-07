@@ -35,7 +35,7 @@ resource "google_container_cluster" "autopilot_cluster" {
   # Documentation: https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview
   enable_autopilot = true
 
-  binary_authorization  {
+  binary_authorization {
     evaluation_mode = "PROJECT_SINGLETON_POLICY_ENFORCE"
   }
 
